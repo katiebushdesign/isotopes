@@ -6,8 +6,8 @@
 
 import els from 'els'
 import _ from 'lodash'
-import scrollTo from 'util/scrollTo'
-import closest from 'util/closest'
+import scrollTo from 'util'
+import closest from 'util'
 
 function hashLoad(config, hash, filters) {
 	let { isotope, sortOptions, container } = config
