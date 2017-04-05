@@ -2,12 +2,13 @@
 	Isotope ==> Hash On Load
 
 	TODO: Maybe refactor this a bit.
+	TODO: use 'onhashchange' event!
 \*--------------------------------------------------------*/
 
 import els from 'els'
 import _ from 'lodash'
-import scrollTo from 'util'
-import closest from 'util'
+import { scrollTo } from 'util/index'
+import { closest } from 'util/index'
 
 function hashLoad(config, hash, filters) {
 	let { isotope, sortOptions, container } = config

@@ -66,8 +66,7 @@ const init = {
 				}).then(() => {
 					if (hash !== '') {
 						hashLoad(config, hash, filters)
-
-						window.addEventListener('popstate', (event) => console.log(event))
+						// window.addEventListener('popstate', (event) => console.log(event))
 					}
 
 					else if (state) {

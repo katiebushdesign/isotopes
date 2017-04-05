@@ -1,11 +1,13 @@
 /*--------------------------------------------------------*\
 	Multi-sort Filter Type
+
+	TODO: Rename to 'checkbox'
 \*--------------------------------------------------------*/
 
-import _includes from 'lodash.includes'
-import _toArray from 'lodash.toarray'
-import permute from 'util/permute'
-import closest from 'util/closest'
+import { includes } from 'lodash'
+import { toArray } from 'lodash'
+import permute from 'util'
+import closest from 'util'
 
 function multi(instance, filterItems) {
 
@@ -29,7 +31,7 @@ function multi(instance, filterItems) {
 	if (this.checked) {
 
 		// If the object already has a value for that group, add it to the existing array
-		if ( group !== 'group__topLevel' && _includes( Object.keys(instance.filters), group ) ) {
+		if ( group !== 'group__topLevel' && _.includes( Object.keys(instance.filters), group ) ) {
 			instance.filters[ group ].push( value )
 		}
 		
@@ -56,7 +58,7 @@ function multi(instance, filterItems) {
 	if ( JSON.stringify( instance.filters ) != '{}' ) {
 
 		// Run permutation on the object converted to an array
-		let results = permute(_toArray( instance.filters ))
+		let results = permute(_.toArray( instance.filters ))
 
 		// For each array in results, join into a selector string
 		results.forEach((r, i) => {

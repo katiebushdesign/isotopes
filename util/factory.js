@@ -18,9 +18,13 @@ export default async function isotopeFactory(config, layout = 'masonry') {
 			transitionDuration: 0,
 			percentPosition: true,
 		}
-
-		// Merge sort options into config object
-		Object.assign(options, isotopeSort.init(sortOptions))
+		
+		// Only merge sortOptions if Object has property (otherwise it will throw an error)
+		if (Object.hasOwnProperty('sortOptions')) {
+			
+			// Merge sort options into config object
+			Object.assign(options, isotopeSort.init(sortOptions))
+		}
 
 		// Create Instance
 		config.isotope = new Isotope(container, options)
