@@ -3,6 +3,7 @@
 \*--------------------------------------------------------*/
 
 import isotopeSort from '../sort'
+import _ from 'lodash'
 
 export default async function isotopeFactory(config, layout = 'masonry') {
 	try {
@@ -28,7 +29,32 @@ export default async function isotopeFactory(config, layout = 'masonry') {
 
 		// Create Instance
 		config.isotope = new Isotope(container, options)
+
+		// Build Data Tree
+		// TODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODO // Don't really know where to put this either.
+		// let { items } = config
+		// let data = Array.from(items).map(item => {
+		// 	let classes = item.className.split(' ')
+		// 	let filters = classes
+		// 		.filter(className => className.indexOf('filter') > -1)
+		// 		.map(className => className.split('filter--')[1])
+		// 	return filters
+		// })
 		
+		// let allFilters = _.unique(_.flatten(data))
+		// let filtersObj = allFilters.reduce((obj, filter) => ({ ...obj, [filter]: [] }), {})
+		
+
+		// _.forEach(data, filter => {
+			
+		// 	let filterArray = filter
+
+		// 	_forEach(filterArray, f => {
+		// 		if ()				
+		// 	})
+		// })
+
+
 		// Return the *modified* config. 
 		return config
 	}

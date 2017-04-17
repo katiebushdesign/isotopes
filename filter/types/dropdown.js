@@ -1,11 +1,17 @@
 /*--------------------------------------------------------*\
 	Dropdown Menu Filters && Functionality
+
+	TODO: I still need to make an error handler for non-matched
+	sorts, and implement hash state.
 \*--------------------------------------------------------*/
 
 import els from 'els'
 import { closest } from 'util'
 import _ from 'lodash'
-// import fastdom from 'fastdom'
+import hashState from '../../util/hashState'
+import fastdom from 'fastdom'
+import fastdomPromised from 'fastdom/extensions/fastdom-promised'
+const fDOM = fastdom.extend(fastdomPromised)
 
 const dropdown = {
 
@@ -36,6 +42,54 @@ const dropdown = {
 		}
 	},
 
+	setStylesOnFilter: {
+		measurements: [],
+		mutations: [],
+
+		measureItems(items) {
+			_.forEach(items, item => {
+				item = item.element
+				this.measurements.push(fDOM.measure(() => {
+					let { paddingTop, borderBottom, paddingBottom } = window.getComputedStyle(item)
+					let paddingTopInt = parseInt(paddingTop, 10)
+					let paddingBottomInt = parseInt(paddingBottom, 10)
+					return { item, paddingTop: paddingTopInt, paddingBottom: paddingBottomInt, borderBottom }
+				}))
+			})
+
+			return Promise.all(this.measurements)
+		},
+		
+		mutateItems(items) {
+			_.forEach(items, ({ item, paddingTop, paddingBottom, borderBottom }, index) => {
+				this.mutations.push(fDOM.mutate(() => {
+					if (index === 0 && paddingTop !== 0)  {
+						item.style.paddingTop = 0
+					}
+
+					if (index !== 0 && paddingTop === 0) {
+						item.style.paddingTop = '2.5rem'
+					}
+
+					if (index === (items.length - 1) && borderBottom !== '') {
+						item.style.borderBottom = 0
+					}
+
+					if (index === (items.length - 1) && paddingBottom !== 0) {
+						item.style.paddingBottom = 0
+					}
+
+					if (index !== (item.length - 1) && (paddingBottom === 0 || borderBottom === 0)) {
+						item.style.paddingBottom = '2.5rem'
+						item.style.borderBottom = '0.0625rem solid #d7d8d6'
+					}
+				}))
+			})
+
+			return Promise.all(this.mutations)
+		},
+	},
+
 	filterActiveItems(filter) {
 
 		// Fetch the group filter accordingly
@@ -59,14 +113,24 @@ const dropdown = {
 			transitionDuration: 500,
 		})
 
+
 		this.isotope.arrange(config)
-		this.isotope.layout()
+
+		// Style padding based on filteredItems location
+		// TODO: This needs to be abstracted as it's not a commonly shared method.
+		let { filteredItems } = this.isotope
+		this.setStylesOnFilter.measureItems(filteredItems)
+			.then(items => this.setStylesOnFilter.mutateItems(items))
+			.then(() => this.isotope.layout())
 	},
 	
 	bindListeners() {
 		_.forEach(this.filters, (filter) => {
 			filter.addEventListener('click', this.changeActiveElement.bind(this, filter))
 			filter.addEventListener('click', this.filterActiveItems.bind(this, filter))
+
+			// I actually need to rewrite this for a dropdown implementation.
+			hashState.call(filter, this.pathname)
 		})
 		this.menu.addEventListener('click', this.changeMenuState.bind(this))
 		document.body.addEventListener('click', this.changeMenuState.bind(this))
@@ -74,6 +138,7 @@ const dropdown = {
 }
 
 export default ({ menu, filters, isotope, sortOptions, filtersObject }) => {
+	let { pathname } = els
 	const { menuClass, activeClass } = els.ui.isotope.dropdowns.classes
 	return Object.assign({
 		menu,
@@ -82,5 +147,6 @@ export default ({ menu, filters, isotope, sortOptions, filtersObject }) => {
 		sortOptions,
 		filtersObject,
 		menuClass,
+		pathname,
 		activeClass }, dropdown)
 }

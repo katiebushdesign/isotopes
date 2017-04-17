@@ -52,9 +52,6 @@ function isotopeFilter({ isotope, sortOptions, filters: filtersObject }) {
 				filtersObject,
 			}
 			dropdown(config).bindListeners()
-
-			// // I need to loop this over all the filters, not just the menus
-			// hashState.call(filter, pathname)
 		})
 	}
 	
