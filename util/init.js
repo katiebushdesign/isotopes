@@ -20,12 +20,12 @@ const init = {
 		let { hash } = els
 		let { name, touch } = els.browser
 		let { listeners } = els.ui.isotope
-		
+
 		// Don't wait for hover on mobile, touch-enabled devices, οr when a hash-load is active.
 		if (
-			   name === 'ios' 
-			|| touch === true 
-			|| window.innerWidth < 1025 
+			   name === 'ios'
+			|| touch === true
+			|| window.innerWidth < 1025
 			|| hash !== ''
 		) {
 			this.onLoad(config)
@@ -40,7 +40,7 @@ const init = {
 		let { hash, history: state } = els
 		let { filters } = els.ui.isotope
 		let { isotope, container } = config
-		
+
 		if (!isotope) {
 			isotopeFactory(config)
 				.then((config) => {
@@ -58,11 +58,11 @@ const init = {
 					filter(config)
 
 					if (config.hasOwnProperty('setSize')) {
-						return sizing.setSize(config) 
+						return sizing.setSize(config)
 					}
-					
+
 					config.isotope.layout()
-			
+
 				}).then(() => {
 					if (hash !== '') {
 						hashLoad(config, hash, filters)

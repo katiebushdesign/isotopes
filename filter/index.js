@@ -11,14 +11,14 @@ import { menu, dropdown } from './types'
 import hashState from '../util/hashState'
 import _ from 'lodash'
 
-function isotopeFilter({ isotope, sortOptions, filters: filtersObject }) {
-	let { 
+function isotopeFilter({ isotope, sortOptions, sortOnLoad, filters: filtersObject }) {
+	let {
 		hash,
 		ui: {
 			isotope: {
-				filters, 
-				inputs, 
-				menus, 
+				filters,
+				inputs,
+				menus,
 				dropdowns: { elements }
 			}
 		}
@@ -26,12 +26,19 @@ function isotopeFilter({ isotope, sortOptions, filters: filtersObject }) {
 
 	// Set filter selectors based on element type
 	filters = inputs.length ? inputs : filters
-	
-	// Set filter type 
+
+	// Set filter type
 	let filterType = inputs.length ? 'checkbox' : (menus.length ? 'menu' : 'dropdown')
-	
+
 	// Menu Filters
 	if (filterType === 'menu') {
+
+		// If "All" filter is not present, select the correct default filter
+		if (sortOnLoad[1] != null) {
+			let activeFilter = [...filters].filter(filter => filter.id === `filter--${sortOnLoad[1]}`)
+			menu.call(activeFilter[0], isotope, sortOptions, filters)
+		}
+
 		_.forEach(filters, (filter) => {
 			filter.addEventListener('click', function(event) {
 				let { pathname } = els
@@ -40,7 +47,7 @@ function isotopeFilter({ isotope, sortOptions, filters: filtersObject }) {
 			})
 		})
 	}
-	
+
 	// Dropdown Filters
 	else if (filterType === 'dropdown') {
 		_.forEach(elements, (element) => {
@@ -54,7 +61,7 @@ function isotopeFilter({ isotope, sortOptions, filters: filtersObject }) {
 			dropdown(config).bindListeners()
 		})
 	}
-	
+
 	// Checkbox Filters
 	else if (filterType === 'checkbox') {
 		return false
