@@ -6,7 +6,6 @@ import els from 'els'
 import init from './util/init'
 import _ from 'lodash'
 
-
 // experimental
 export default async function() {
 	let { isotopes } = els

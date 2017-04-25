@@ -58,6 +58,7 @@ const init = {
 					filter(config)
 
 					if (config.hasOwnProperty('setSize')) {
+						sizing.setSizeOnResize(config)
 						return sizing.setSize(config)
 					}
 

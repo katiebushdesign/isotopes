@@ -22,7 +22,7 @@ const sizing = {
 		_.forEach(items, (item) => {
 			measurements.push(fDOM.measure(() => {
 				let { height } = item.getBoundingClientRect()
-				if (height > this.state.__height) 
+				if (height > this.state.__height)
 					this.state.__height = height
 
 				return item
@@ -43,7 +43,7 @@ const sizing = {
 		return Promise.all(mutations)
 	},
 
-	setHeight(items) {
+	setHeight(items, isotope) {
 		return this.measureHeight(items)
 			.then(items => this.mutateHeight(items))
 	},
@@ -52,7 +52,13 @@ const sizing = {
 		if (options === 'height') {
 			return this.setHeight(items)
 		}
-	}
+	},
+
+	setSizeOnResize({ setSize: options, items }) {
+		if (options === 'height') {
+			window.addEventListener('resize', _.debounce(this.setHeight.bind(this, items), 150))
+		}
+	},
 }
 
 export default sizing

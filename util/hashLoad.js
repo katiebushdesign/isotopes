@@ -22,14 +22,16 @@ function hashLoad(config, hash, filters) {
 
 	if (verified.length) {
 
+		// TODO: I need to remove the currently active class here or somewhere?
+
 		// Set active class on hashed filter__item
 		verified.map((filter) => filter.classList.add('filter__item--active'))
-		
+
 		// Merge config/options
 		let filter = `.filter--${hashFilter}`
 		let options = Object.assign(config, { filter })
-		
-		// Scroll to Isotope Block after Layout 
+
+		// Scroll to Isotope Block after Layout
 		isotope.once('layoutComplete', scrollTo(closest(container, block)))
 
 		// Sort / Layout
@@ -49,4 +51,4 @@ function hashLoad(config, hash, filters) {
 }
 
 
-export default hashLoad	
+export default hashLoad
