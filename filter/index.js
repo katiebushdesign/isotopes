@@ -7,7 +7,8 @@
 \*--------------------------------------------------------*/
 
 import els from 'els'
-import { menu, dropdown } from './types'
+import { getMenu } from './types/checkbox'
+import { menu, dropdown, checkbox } from './types'
 import hashState from '../util/hashState'
 import _ from 'lodash'
 
@@ -64,7 +65,10 @@ function isotopeFilter({ isotope, sortOptions, sortOnLoad, filters: filtersObjec
 
 	// Checkbox Filters
 	else if (filterType === 'checkbox') {
-		return false
+		getMenu()
+		_.forEach(inputs, input => {
+			input.addEventListener('click', checkbox.bind(input, filtersObject, isotope))
+		})
 	}
 }
 

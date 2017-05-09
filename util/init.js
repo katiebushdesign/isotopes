@@ -14,6 +14,7 @@ import _ from 'lodash'
 import sizing from './sizing'
 import hashLoad from './hashLoad'
 import history from './history'
+import loader from './loader'
 
 const init = {
 	onHover(filters, config) {
@@ -72,6 +73,11 @@ const init = {
 
 					else if (state) {
 						history(config)
+					}
+
+					else if (config.hasOwnProperty('loader')) {
+						let { button } = config.loader
+						button.addEventListener('click', loader.bind(button, config))
 					}
 
 					config.isotope.layout()

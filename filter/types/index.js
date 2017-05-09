@@ -4,10 +4,10 @@
 
 import menu from './menu'
 import dropdown from './dropdown'
-import multi from './multi'
+import checkbox from './checkbox'
 
 export {
 	menu,
 	dropdown,
-	multi
+	checkbox
 }

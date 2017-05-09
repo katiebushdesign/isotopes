@@ -113,7 +113,6 @@ const dropdown = {
 			transitionDuration: 500,
 		})
 
-
 		this.isotope.arrange(config)
 
 		// Style padding based on filteredItems location
