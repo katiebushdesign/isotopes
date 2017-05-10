@@ -12,7 +12,7 @@ import eventHandler from './eventHandler'
 import _ from 'lodash'
 
 import sizing from './sizing'
-import hashLoad from './hashLoad'
+// import hashLoad from './hashLoad'
 import history from './history'
 import loader from './loader'
 
@@ -66,16 +66,16 @@ const init = {
 					config.isotope.layout()
 
 				}).then(() => {
-					if (hash !== '') {
-						hashLoad(config, hash, filters)
-						// window.addEventListener('popstate', (event) => console.log(event))
-					}
+					// if (hash !== '') {
+					// 	hashLoad(config, hash, filters)
+					// 	// window.addEventListener('popstate', (event) => console.log(event))
+					// }
 
-					else if (state) {
-						history(config)
-					}
-
-					else if (config.hasOwnProperty('loader')) {
+					// else if (state) {
+					// 	history(config)
+					// }
+					
+					if (config.hasOwnProperty('loader')) {
 						let { button } = config.loader
 						button.addEventListener('click', loader.bind(button, config))
 					}

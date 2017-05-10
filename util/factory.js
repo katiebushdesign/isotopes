@@ -6,9 +6,8 @@ import isotopeSort from '../sort'
 import _ from 'lodash'
 
 export default async function isotopeFactory(config) {
-	let library = config.type.lib || 'isotope-layout'
-	let layout = config.type.layout || 'masonry'
-
+	let library = config.hasOwnProperty('type') ? config.type.lib : 'isotope-layout'
+	let layout = config.hasOwnProperty('type') ? config.type.layout : 'masonry'
 	try {
 		const Isotope = await import('isotope-layout')
 		const Packery = (layout === 'packery') ? await import ('isotope-packery') : false

@@ -9,7 +9,7 @@
 import els from 'els'
 import { getMenu } from './types/checkbox'
 import { menu, dropdown, checkbox } from './types'
-import hashState from '../util/hashState'
+// import hashState from '../util/hashState'
 import _ from 'lodash'
 
 function isotopeFilter({ isotope, sortOptions, sortOnLoad, filters: filtersObject }) {
@@ -44,7 +44,7 @@ function isotopeFilter({ isotope, sortOptions, sortOnLoad, filters: filtersObjec
 			filter.addEventListener('click', function(event) {
 				let { pathname } = els
 				menu.call(filter, isotope, sortOptions, filters)
-				hashState.call(filter, pathname)
+				// hashState.call(filter, pathname)
 			})
 		})
 	}
