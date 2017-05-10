@@ -77,7 +77,7 @@ const init = {
 					
 					if (config.hasOwnProperty('loader')) {
 						let { button } = config.loader
-						button.addEventListener('click', loader.bind(button, config))
+						loader(config, button)
 					}
 
 					config.isotope.layout()

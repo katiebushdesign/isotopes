@@ -13,12 +13,18 @@
 
 import els from 'els'
 import request from 'superagent'
-// import getPosts from './getPosts'
-// import loadPosts from './loadPosts'
-// import parsePosts from './parsePosts'
+import loadPosts from './loadPosts'
 
-function loader(config) {
-	let { loader: { count, action }} = config
+function loader(config, listener) {
+	let { loader: { count, action, storage }} = config
+	
+	// Has data changed?
+	let saved = JSON.parse(window.localStorage.getItem(storage))
+	let currentTime = (new Date()).getTime()
+	let lastSaved = (saved === null) ? 0 : saved.time
+	let dt = (currentTime - lastSaved) / (1000 * 60)
+
+	// Request
 	let req = new Promise((resolve, reject) => {
 		request
 			.post(ajaxurl)
@@ -34,15 +40,29 @@ function loader(config) {
 				}
 			})
 	})
+	
+	.then((res) => {
 
-	.then((posts) => {
-		let nodes = JSON.parse(posts)
-			.reduce((arr, post) => {
-				let div = document.createElement('div')
-				div.innerHTML = post
-				return arr.concat(div.firstChild)
-			}, [])
-		config.isotope.insert(nodes)
+		// Maybe I should convert this to a List to check exact equality???
+		if (res) {
+			
+			// Get current data if request is made
+			let current = JSON.parse(res)
+			
+			// Don't update if data has not changed
+			if (saved === null || saved.length !== current.length) {
+
+				const data = {
+					posts: current,
+					time: currentTime,
+				}
+				
+				// Set localStorage
+				window.localStorage.setItem(storage, JSON.stringify(data))
+			}
+		}
+
+		return loadPosts(listener, config)
 	})
 }
 

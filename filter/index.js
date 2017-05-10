@@ -12,7 +12,7 @@ import { menu, dropdown, checkbox } from './types'
 // import hashState from '../util/hashState'
 import _ from 'lodash'
 
-function isotopeFilter({ isotope, sortOptions, sortOnLoad, filters: filtersObject }) {
+function isotopeFilter({ isotope, sortOptions, sortOnLoad, loader, filters: filtersObject }) {
 	let {
 		hash,
 		ui: {
@@ -67,7 +67,7 @@ function isotopeFilter({ isotope, sortOptions, sortOnLoad, filters: filtersObjec
 	else if (filterType === 'checkbox') {
 		getMenu()
 		_.forEach(inputs, input => {
-			input.addEventListener('click', checkbox.bind(input, filtersObject, isotope))
+			input.addEventListener('click', checkbox.bind(input, filtersObject, isotope, loader))
 		})
 	}
 }

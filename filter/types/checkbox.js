@@ -20,7 +20,26 @@ function getMenu() {
 	menuButton.addEventListener('click', () => sidebar.classList.toggle('sidebar--open'))
 }
 
-function checkbox(filtersObject, isotope) {
+function checkbox(filtersObject, isotope, loader) {
+
+	// Load all Posts if not yet loaded
+	// TODO: Abstract this.
+	let { posts, time } = JSON.parse(window.localStorage.getItem(loader.storage))
+	console.log(posts.length)
+	if (posts.length !== 0) {
+		let nodes = posts.splice(0, posts.length)
+			.reduce((arr, post) => {
+				let div = document.createElement('div')
+				div.innerHTML = post
+				return arr.concat(div.firstChild)
+			}, [])
+		isotope.insert(nodes)
+		
+		// Reset Data
+		const updatedData = { posts, time }	
+		window.localStorage.setItem(loader.storage, JSON.stringify(updatedData))
+		loader.button.parentNode.removeChild(loader.button)
+	}
 
 	// Define filters && get value
 	let filters = ''
