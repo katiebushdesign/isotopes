@@ -59,7 +59,7 @@ const dropdown = {
 
 			return Promise.all(this.measurements)
 		},
-		
+
 		mutateItems(items) {
 			_.forEach(items, ({ item, paddingTop, paddingBottom, borderBottom }, index) => {
 				this.mutations.push(fDOM.mutate(() => {
@@ -123,7 +123,7 @@ const dropdown = {
 			.then(items => this.setStylesOnFilter.mutateItems(items))
 			.then(() => this.isotope.layout())
 	},
-	
+
 	bindListeners() {
 		_.forEach(this.filters, (filter) => {
 			filter.addEventListener('click', this.changeActiveElement.bind(this, filter))
