@@ -57,25 +57,29 @@ const init = {
 					// Add filters to Isotope instance
 					filter(config)
 
+					// Options to setSize of Isotope Items
 					if (config.hasOwnProperty('setSize')) {
 						sizing.setSizeOnResize(config)
 						return sizing.setSize(config)
 					}
 
+					// Layout
 					config.isotope.layout()
 
-				}).then(() => {
-					if (hash !== '') {
-						hashLoad(config, hash, filters)
-						// window.addEventListener('popstate', (event) => console.log(event))
-					}
-
-					else if (state) {
-						history(config)
-					}
-
-					config.isotope.layout()
 				})
+
+				// .then(() => {
+				// 	if (hash !== '') {
+				// 		hashLoad(config, hash, filters)
+				// 		window.addEventListener('popstate', (event) => console.log(event))
+				// 	}
+
+				// 	else if (state) {
+				// 		history(config)
+				// 	}
+
+				// 	config.isotope.layout()
+				// })
 		}
 	},
 }

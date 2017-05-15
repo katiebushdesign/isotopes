@@ -11,7 +11,7 @@ import { menu, dropdown } from './types'
 import hashState from '../util/hashState'
 import _ from 'lodash'
 
-function isotopeFilter({ isotope, sortOptions, sortOnLoad, filters: filtersObject }) {
+function isotopeFilter({ id, isotope, sortOptions, sortOnLoad, filters: filtersObject }) {
 	let {
 		hash,
 		ui: {
@@ -36,14 +36,14 @@ function isotopeFilter({ isotope, sortOptions, sortOnLoad, filters: filtersObjec
 		// If "All" filter is not present, select the correct default filter
 		if (sortOnLoad[1] != null) {
 			let activeFilter = [...filters].filter(filter => filter.id === `filter--${sortOnLoad[1]}`)
-			menu.call(activeFilter[0], isotope, sortOptions, filters)
+			menu.call(activeFilter[0], isotope, sortOptions, filters, id)
 		}
 
 		_.forEach(filters, (filter) => {
 			filter.addEventListener('click', function(event) {
 				let { pathname } = els
 				menu.call(filter, isotope, sortOptions, filters)
-				hashState.call(filter, pathname)
+				// hashState.call(filter, pathname)
 			})
 		})
 	}

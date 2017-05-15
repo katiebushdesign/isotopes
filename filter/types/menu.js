@@ -5,7 +5,7 @@
 import els from 'els'
 import _ from 'lodash'
 
-function menuFilters(isotope, sortOptions, filters) {
+function menuFilters(isotope, sortOptions, filters, id = null) {
 
 	// Clear hash, if hash exists
 	if (els.hash !== '') window.location.hash = ''
@@ -23,9 +23,11 @@ function menuFilters(isotope, sortOptions, filters) {
 	sortOptions = !!sortOptions ? sortOptions : {}
 	let config = Object.assign(sortOptions, {
 		filter: filter.indexOf('.') > -1 ? filter : '*',
-		transitionDuration: 500,
+		transitionDuration: id === 'team' ? 0 : 500,
 	})
-	
+
+	console.log({isotope, id})
+
 	isotope.arrange(config)
 	isotope.layout()
 }
