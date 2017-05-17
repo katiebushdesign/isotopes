@@ -12,7 +12,7 @@ import { menu, dropdown, checkbox } from './types'
 // import hashState from '../util/hashState'
 import _ from 'lodash'
 
-function isotopeFilter({ isotope, sortOptions, sortOnLoad, loader, filters: filtersObject }) {
+function isotopeFilter({ id, isotope, sortOptions, sortOnLoad, loader, filters: filtersObject }) {
 	let {
 		hash,
 		ui: {
@@ -35,9 +35,16 @@ function isotopeFilter({ isotope, sortOptions, sortOnLoad, loader, filters: filt
 	if (filterType === 'menu') {
 
 		// If "All" filter is not present, select the correct default filter
-		if (sortOnLoad[1] != null) {
-			let activeFilter = [...filters].filter(filter => filter.id === `filter--${sortOnLoad[1]}`)
-			menu.call(activeFilter[0], isotope, sortOptions, filters)
+		if (sortOnLoad === true || sortOnLoad[1] != null) {
+			let activeFilter
+			if (typeof sortOnLoad === 'array') {
+				activeFilter = [...filters].filter(filter => filter.id === `filter--${sortOnLoad[1]}`)
+			}
+
+			else {
+				activeFilter = [...filters].filter(filter => filter.id === `filter--all`)
+			}
+			menu.call(activeFilter[0], isotope, sortOptions, filters, id)
 		}
 
 		_.forEach(filters, (filter) => {

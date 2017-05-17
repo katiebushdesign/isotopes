@@ -13,11 +13,12 @@ function getMenu() {
 	let {
 		ui: {
 			isotope: {
-				checkboxes: { menuButton, sidebar }
+				checkboxes: { menuButton, sidebar, closeButton }
 			}
 		}
 	} = els
-	menuButton.addEventListener('click', () => sidebar.classList.toggle('sidebar--open'))
+	menuButton.addEventListener('click', () => sidebar.classList.add('sidebar--open'))
+	closeButton.addEventListener('click', () => sidebar.classList.remove('sidebar--open'))
 }
 
 function checkbox(filtersObject, isotope, loader) {
@@ -25,7 +26,6 @@ function checkbox(filtersObject, isotope, loader) {
 	// Load all Posts if not yet loaded
 	// TODO: Abstract this.
 	let { posts, time } = JSON.parse(window.localStorage.getItem(loader.storage))
-	console.log(posts.length)
 	if (posts.length !== 0) {
 		let nodes = posts.splice(0, posts.length)
 			.reduce((arr, post) => {
@@ -86,6 +86,8 @@ function checkbox(filtersObject, isotope, loader) {
 
 	// Check if filters object is empty
 	if ( JSON.stringify( filtersObject ) != '{}' ) {
+
+		console.log(_.toArray( filtersObject ))
 
 		// Run permutation on the object converted to an array
 		let results = permute(_.toArray( filtersObject ))
