@@ -5,7 +5,7 @@
 import els from 'els'
 import _ from 'lodash'
 
-function menuFilters(isotope, sortOptions, filters, id) {
+function menuFilters(isotope, sortOptions, filters, id, sortOnLoad) {
 
 	// Clear hash, if hash exists
 	if (els.hash !== '') window.location.hash = ''
@@ -19,6 +19,7 @@ function menuFilters(isotope, sortOptions, filters, id) {
 
 	// Specific to team ... TODO: Need to abstract this.
 	let all = (id === 'team') ? '*:not(.filter--affiliatedPartners):not(.filter--advisors)' : '*'
+	let duration = sortOnLoad ? 0 : 500
 
 	// If filter contains '.' it is a class, thus it should be run individually.
 	// Otherwise run the '*' (all) filter.
@@ -26,7 +27,7 @@ function menuFilters(isotope, sortOptions, filters, id) {
 	sortOptions = !!sortOptions ? sortOptions : {}
 	let config = Object.assign(sortOptions, {
 		filter: filter.indexOf('.') > -1 ? filter : all,
-		transitionDuration: 500,
+		transitionDuration: duration,
 	})
 
 	isotope.arrange(config)

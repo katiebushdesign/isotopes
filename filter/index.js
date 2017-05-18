@@ -44,7 +44,7 @@ function isotopeFilter({ id, isotope, sortOptions, sortOnLoad, loader, filters: 
 			else {
 				activeFilter = [...filters].filter(filter => filter.id === `filter--all`)
 			}
-			menu.call(activeFilter[0], isotope, sortOptions, filters, id)
+			menu.call(activeFilter[0], isotope, sortOptions, filters, id, sortOnLoad)
 		}
 
 		_.forEach(filters, (filter) => {
