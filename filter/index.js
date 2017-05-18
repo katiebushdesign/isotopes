@@ -50,7 +50,7 @@ function isotopeFilter({ id, isotope, sortOptions, sortOnLoad, loader, filters: 
 		_.forEach(filters, (filter) => {
 			filter.addEventListener('click', function(event) {
 				let { pathname } = els
-				menu.call(filter, isotope, sortOptions, filters)
+				menu.call(filter, isotope, sortOptions, filters, id)
 				// hashState.call(filter, pathname)
 			})
 		})

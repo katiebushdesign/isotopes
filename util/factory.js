@@ -24,8 +24,8 @@ export default async function isotopeFactory(config) {
 		}
 		
 		// Only merge sortOptions if Object has property (otherwise it will throw an error)
-		if (Object.hasOwnProperty('sortOptions')) {
-			
+		if (config.hasOwnProperty('sortOptions')) {
+
 			// Merge sort options into config object
 			Object.assign(options, isotopeSort.init(sortOptions))
 		}
