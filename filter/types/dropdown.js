@@ -129,7 +129,7 @@ const dropdown = {
 			filter.addEventListener('click', this.filterActiveItems.bind(this, filter))
 
 			// I actually need to rewrite this for a dropdown implementation.
-			hashState.call(filter, this.pathname)
+			// hashState.call(filter, this.pathname)
 		})
 		this.menu.addEventListener('click', this.changeMenuState.bind(this))
 		document.body.addEventListener('click', this.changeMenuState.bind(this))

@@ -58,11 +58,13 @@ const init = {
 					// Add filters to Isotope instance
 					filter(config)
 
+					// Options to setSize of Isotope Items
 					if (config.hasOwnProperty('setSize')) {
 						sizing.setSizeOnResize(config)
 						return sizing.setSize(config)
 					}
 
+					// Layout
 					config.isotope.layout()
 
 				}).then(() => {
@@ -79,8 +81,6 @@ const init = {
 						let { button } = config.loader
 						loader(config, button)
 					}
-
-					config.isotope.layout()
 				})
 		}
 	},

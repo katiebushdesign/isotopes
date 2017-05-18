@@ -19,7 +19,6 @@ function menuFilters(isotope, sortOptions, filters, id) {
 
 	// Specific to team ... TODO: Need to abstract this.
 	let all = (id === 'team') ? '*:not(.filter--affiliatedPartners):not(.filter--advisors)' : '*'
-	console.log(id)
 
 	// If filter contains '.' it is a class, thus it should be run individually.
 	// Otherwise run the '*' (all) filter.
@@ -30,8 +29,6 @@ function menuFilters(isotope, sortOptions, filters, id) {
 		transitionDuration: 500,
 	})
 
-	console.log(config)
-	
 	isotope.arrange(config)
 	isotope.layout()
 }
