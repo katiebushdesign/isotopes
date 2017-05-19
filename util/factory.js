@@ -11,7 +11,7 @@ export default async function isotopeFactory(config, layout = 'masonry') {
 		let { isotope, container, selector, gutter, sortOnLoad, sortOptions } = config
 		let options = {
 			itemSelector: selector,
-			layoutMode: layout, 
+			layoutMode: layout,
 			[layout]: {
 				columnWidth: selector,
 				gutter,
@@ -19,10 +19,10 @@ export default async function isotopeFactory(config, layout = 'masonry') {
 			transitionDuration: 0,
 			percentPosition: true,
 		}
-		
+
 		// Only merge sortOptions if Object has property (otherwise it will throw an error)
 		if (Object.hasOwnProperty('sortOptions')) {
-			
+
 			// Merge sort options into config object
 			Object.assign(options, isotopeSort.init(sortOptions))
 		}
@@ -40,25 +40,25 @@ export default async function isotopeFactory(config, layout = 'masonry') {
 		// 		.map(className => className.split('filter--')[1])
 		// 	return filters
 		// })
-		
+
 		// let allFilters = _.unique(_.flatten(data))
 		// let filtersObj = allFilters.reduce((obj, filter) => ({ ...obj, [filter]: [] }), {})
-		
+
 
 		// _.forEach(data, filter => {
-			
+
 		// 	let filterArray = filter
 
 		// 	_forEach(filterArray, f => {
-		// 		if ()				
+		// 		if ()
 		// 	})
 		// })
 
 
-		// Return the *modified* config. 
+		// Return the *modified* config.
 		return config
 	}
-	
+
 	catch(err) {
 		console.error('Webpack failed to load module: isotope-layout')
 		return new Error(err)

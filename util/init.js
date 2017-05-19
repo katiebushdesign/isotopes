@@ -68,6 +68,10 @@ const init = {
 
 				})
 
+				.then(() => {
+					config.isotope.layout()
+				})
+
 				// .then(() => {
 				// 	if (hash !== '') {
 				// 		hashLoad(config, hash, filters)
