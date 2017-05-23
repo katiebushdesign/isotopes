@@ -3,9 +3,10 @@
 \*--------------------------------------------------------*/
 
 import els from 'els'
-import init from './util/init'
 import _ from 'lodash'
+// import buildConfigs from './buildConfig'
 
+<<<<<<< HEAD
 export default(() => {
 	let { isotopes } = els
 	let { filters } = els.ui.isotope
@@ -23,3 +24,13 @@ export default(() => {
 		}
 	})
 })
+=======
+export default async function() {
+	let { configs, ui } = els.isotopes
+	configs = configs.filter(config => !!config.container)
+	if (configs.length) {
+		const isotopes = await import(`./util/isotopes`)
+		_.forEach(configs, config => isotopes.default.init(config, ui))
+	}
+}
+>>>>>>> 2eb5d14... major updates
