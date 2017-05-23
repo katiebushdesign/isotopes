@@ -19,6 +19,7 @@ function menuFilters(isotope, sortOptions, filters, id, sortOnLoad) {
 
 	// Specific to team ... TODO: Need to abstract this.
 	let all = (id === 'team') ? '*:not(.filter--affiliatedPartners):not(.filter--advisors)' : '*'
+	filter = (id === 'team') ? `${filter}:not(.filter--affiliatedPartners):not(.filter--advisors)` : filter
 	let duration = sortOnLoad ? 0 : 500
 
 	// If filter contains '.' it is a class, thus it should be run individually.
