@@ -15,6 +15,7 @@ import sizing from './sizing'
 // import hashLoad from './hashLoad'
 import history from './history'
 import loader from './loader'
+import lazyload from 'modules/team'
 
 const init = {
 	onHover(filters, config) {
@@ -80,6 +81,10 @@ const init = {
 					if (config.hasOwnProperty('loader')) {
 						let { button } = config.loader
 						loader(config, button)
+					}
+
+					if (config.id === 'team') {
+						lazyload()
 					}
 				})
 		}
