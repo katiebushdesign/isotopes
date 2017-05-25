@@ -26,14 +26,9 @@ function menuFilters({ isotope, sortOptions }, filterItems, sortOnLoad = { init:
 	}
 
 	// Get the filter
-<<<<<<< HEAD
-	let filter = this.getAttribute('data-filter')
-	
-=======
 	let filter = sortOnLoad.init ? sortOnLoad.defaultFilter.getAttribute('data-filter') : this.getAttribute('data-filter')
 	let duration = sortOnLoad.init ? 0 : 500
 
->>>>>>> 2eb5d14... major updates
 	// If filter contains '.' it is a class, thus it should be run individually.
 	// Otherwise run the '*' (all) filter.
 	// This leaves all as the default options, and also mitigates errors if data-filters are misconfigured.

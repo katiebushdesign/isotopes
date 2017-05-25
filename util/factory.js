@@ -34,13 +34,8 @@ export default async function isotopeFactory(config) {
 
 		// Create Instance
 		config.isotope = new Isotope(container, options)
-<<<<<<< HEAD
-		
-		// Return the *modified* config. 
-=======
 
 		// Return the modified config.
->>>>>>> 2eb5d14... major updates
 		return config
 	}
 

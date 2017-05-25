@@ -82,6 +82,10 @@ const isotopes = {
 					}
 
 					config.isotope.layout()
+
+					if (els.hash !== '') {
+						hashLoad(this.config, this.ui, els.hash)
+					}
 				})
 		}
 	},

@@ -1,7 +1,5 @@
 /*--------------------------------------------------------*\
 	Dropdown Menu Filters && Functionality
-<<<<<<< HEAD
-=======
 
 	TODO:
 
@@ -12,18 +10,15 @@
 	of options and then style from there. Perhaps the method
 	itself could also be used for other configs. (Actually this is probably necessary)
 	(4) Split mutate function into separate functions, or maybe even an object?
->>>>>>> 2eb5d14... major updates
+	(5) Realistically, given the structure, I could use something like
+	immutableJS or baobab...it might even be easier. (look at lib size for consideration)
 \*--------------------------------------------------------*/
 
 import { closest } from 'util'
 import _ from 'lodash'
-<<<<<<< HEAD
-// import fastdom from 'fastdom'
-=======
 import fastdom from 'fastdom'
 import fastdomPromised from 'fastdom/extensions/fastdom-promised'
 const fDOM = fastdom.extend(fastdomPromised)
->>>>>>> 2eb5d14... major updates
 
 const dropdown = {
 
@@ -37,8 +32,15 @@ const dropdown = {
 		}
 	},
 
+	// Need to turn the other active menu off?
 	setActiveMenuItem(menuItem) {
 		let group = closest(menuItem, this.menuClass)
+		let filterGroup = group.dataset.filterGroup
+		// this.ui.dropdowns.trees.map(tree => {
+		// 	return (tree.id === filterGroup)
+		// 		? Object.assign(tree, { active: true })
+		// 		: tree
+		// })
 		let activeElement = group.querySelector(`.${this.activeItemClass}`)
 		let currentFilter = group.getAttribute('data-active')
 		let nextFilter = menuItem.getAttribute('data-filter')
@@ -50,9 +52,6 @@ const dropdown = {
 		}
 	},
 
-<<<<<<< HEAD
-	filterActiveItems(filter) {
-=======
 	setStylesOnFilter: {
 		measurements: [],
 		mutations: [],
@@ -117,7 +116,6 @@ const dropdown = {
 
 	filterActiveItems(menuItem) {
 		let { isotope, filters, sortOptions } = this.config
->>>>>>> 2eb5d14... major updates
 
 		// Fetch the group filter accordingly
 		let group = closest(menuItem, this.menuClass).getAttribute('data-filter-group')
@@ -137,16 +135,6 @@ const dropdown = {
 			transitionDuration: 500,
 		})
 
-<<<<<<< HEAD
-		this.isotope.arrange(config)
-		this.isotope.layout()
-	},
-	
-	bindListeners() {
-		_.forEach(this.filters, (filter) => {
-			filter.addEventListener('click', this.changeActiveElement.bind(this, filter))
-			filter.addEventListener('click', this.filterActiveItems.bind(this, filter))
-=======
 		isotope.arrange(config)
 
 		// Style padding based on filteredItems location
@@ -154,89 +142,97 @@ const dropdown = {
 			.then(items => this.setStylesOnFilter.mutateItems(items))
 			.then(() => {
 				isotope.layout()
-				this.mutateFilterOptions(group)
+				// this.mutateFilterOptions(group)
 			})
 	},
 
 	buildDataTree() {
-		this.ui.dropdowns.dataTrees = _.map(this.ui.dropdowns.menus, menu => {
-			let menuID = menu.dataset.filterGroup
-			let menuItems = [...menu.querySelectorAll(`.${this.itemClass}`)]
-			let dataItems = menuItems.map(({ id }) => (id === 'all') ? 'all' : id.split('filter--')[1])
-			let dataTree = [{
-				name: menuID,
-				isActive: false,
-			}, {
-				active: {},
-				inactive: {}
-			}]
-			_.forEach(dataItems, (item, index) => dataTree[1].active[item] = menuItems[index])
-			return dataTree
+		const id = this.menu.dataset.filterGroup
+		let menuItems = [...this.menuItems].filter(({ id }) => id !== 'all')
+		let items = menuItems.reduce((obj, item) => Object.assign(obj, {[item.id]: { active: true, item }}), {})
+		this.ui.dropdowns.trees.push({
+			id,
+			active: false,
+			items,
 		})
 	},
 
-	resetDataTree(group) {
-		_.forEach(this.ui.dropdowns.dataTrees, tree => {
-			let inactives = tree[1].inactive
-			_.forEach(inactives, (value, key) => {
-				value.style.display = 'block'
-				tree[1].active[key] = value
-				delete tree[1].inactive[key]
+	resetDataTree(tree) {
+		this.ui.dropdowns.trees = this.ui.dropdowns.trees.map(tree => {
+			let items = Object.keys(tree.items).map(key => {
+				tree.items[key].item.style.display = ''
+				return {
+					active: true,
+					item: tree.items[key].item
+				}
 			})
+
+			return Object.assign(tree, { items })
 		})
 	},
 
 	mutateFilterOptions(group) {
-		let { dataTrees } = this.ui.dropdowns
-		let currentTree = _.findIndex(dataTrees, tree => tree[0].name === group)
-		let menu1 = dataTrees[currentTree][0].isActive
-		let menu2 = dataTrees[currentTree === 1 ? 0 : 1][0].isActive
+		let { trees } = this.ui.dropdowns
 
-		if (menu1 ^ menu2) {
+		// Get current && active trees; if all trees are active, return false (don't mutate options)
+		let currentTree = _.findIndex(trees, ({ id }) => id === group)
+		let activeTrees = trees.map(({ active }) => active)
+		if (activeTrees.every(element => element)) {
 			return false
 		}
 
-		this.ui.dropdowns.dataTrees = dataTrees.map(tree => {
-			let { name, isActive } = tree[0]
-			if (name === group && !isActive) {
-				return [
-					{
-						isActive: true,
-						name,
-					},
-					tree[1]
-				]
-			}
-
-			else {
-				return tree
-			}
-		})
-
-		this.resetDataTree(group)
+		// Fetch all currently filtered Isotope items and reduce them to a flattened array of unique classNames
 		let { filteredItems } = this.config.isotope
 		let classNames = [...new Set(
-			_.flatten(
-				filteredItems.map(({ element }) => {
-					let classes = [...element.classList]
-					let filters = classes
-						.filter(className => className.indexOf('filter') > -1)
-						.map(className => className.split('filter--')[1])
-					return filters
-				})
-			)
-		)].concat(['all'])
-		let siblingDropdown = (_.findIndex(this.ui.dropdowns.dataTrees, tree => tree[0].name === group) === 0)
-			? this.ui.dropdowns.dataTrees[1][1]
-			: this.ui.dropdowns.dataTrees[0][1]
-		let siblingDropdownKeys = Object.keys(siblingDropdown.active)
-		let difference = _.difference(siblingDropdownKeys, classNames)
-		_.forEach(difference, key => {
-			let value = siblingDropdown.active[key]
-			delete siblingDropdown.active[key]
-			siblingDropdown.inactive[key] = value
-			siblingDropdown.inactive[key].style.display = 'none'
->>>>>>> 2eb5d14... major updates
+			_.flatten(filteredItems.map(({ element: { classList }}) => [...classList].filter(className => className.indexOf('filter') > -1)))
+		)]
+
+		// Fetch all non-active trees, reset active trees, and compute the intersection of the filters between the trees
+		let siblingDropdowns = this.ui.dropdowns.trees.filter((item, index) => index !== currentTree)
+		// _.forEach(siblingDropdowns, tree => this.resetDataTree(tree))
+		let siblingDropdownsKeys = siblingDropdowns.map(({ id, items }) => {
+			let keys = Object.keys(items).filter(key => items[key].active)
+			return { id, keys }
+		})
+		let differences = siblingDropdownsKeys.map(({ id, keys }) => ({ id, difference: _.difference(keys, classNames) }))
+
+		// Re-map
+		this.ui.dropdowns.trees = this.ui.dropdowns.trees.map(tree => {
+			return _.first(differences.map(({ id, difference }) => {
+				if (tree['id'] === id) {
+					let items = Object.keys(tree.items).map(key => {
+						if (difference.includes(key)) {
+							return {
+								active: false,
+								item: tree.items[key].item
+							}
+						}
+
+						else {
+							return tree.items[key]
+						}
+					})
+
+					return { id, active: tree.active, items }
+				}
+
+				else {
+					return tree
+				}
+			}))
+		})
+
+		// Mutate
+		_.forEach(this.ui.dropdowns.trees, tree => {
+			_.forEach(tree.items, item => {
+				if (!item.active) {
+					item.item.style.display = 'none'
+				}
+
+				else {
+					item.item.style.display = ''
+				}
+			})
 		})
 	},
 
@@ -252,19 +248,12 @@ const dropdown = {
 			menuItem.addEventListener('click', this.filterActiveItems.bind(this, menuItem))
 		})
 
-		// Chainable method calls.
 		return this
 	},
 }
 
-<<<<<<< HEAD
-export default ({ menu, filters, isotope, sortOptions, filtersObject }) => {
-	const { menuClass, activeClass } = els.ui.isotope.dropdowns.classes
-=======
 export default (config, ui, { menu, menuItems }) => {
-	// Do I need the menus reference here?
 	const { menus, classes: { menuClass, itemClass, activeMenuClass, activeItemClass }} = ui.dropdowns
->>>>>>> 2eb5d14... major updates
 	return Object.assign({
 		config,
 		ui,
@@ -272,12 +261,8 @@ export default (config, ui, { menu, menuItems }) => {
 		menus,
 		menuItems,
 		menuClass,
-<<<<<<< HEAD
-		activeClass }, dropdown)
-=======
 		itemClass,
 		activeMenuClass,
 		activeItemClass,
 	}, dropdown)
->>>>>>> 2eb5d14... major updates
 }

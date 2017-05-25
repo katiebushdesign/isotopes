@@ -1,8 +1,5 @@
 /*--------------------------------------------------------*\
-	Isotope ==> Hash On Load
-
-	TODO: Maybe refactor this a bit.
-	TODO: use 'onhashchange' event!
+	Isotope => Filter Hash onLoad
 \*--------------------------------------------------------*/
 
 import els from 'els'
@@ -10,27 +7,46 @@ import _ from 'lodash'
 import { scrollTo } from 'util/index'
 import { closest } from 'util/index'
 
-function hashLoad(config, hash, filters) {
-	let { isotope, sortOptions, container } = config
+function hashLoad(config, ui, hash) {
+	let { isotope, sortOptions, container, filterType } = config
 	let block = container.id
 		.split('--')
 		.filter(id => id !== 'container')
 		.map(id => `block--${id}`)
-	block = _.head(block)
-	let verified = Array.from(filters).filter(filter => filter.id.indexOf(hash.split('#')[1]) > -1)
+		.pop()
 	let hashFilter = hash.split('#')[1]
+	let filterItem = [...ui.filters].filter(({ id }) => id.indexOf(hashFilter) > -1).pop()
 
-	if (verified.length) {
+	if (!!filterItem) {
 
 		// Set active class on hashed filter__item
-		verified.map((filter) => filter.classList.add('filter__item--active'))
-		
+		if (filterType === 'menu') {
+			[...ui.filters].map(item => {
+				if (filterItem !== item) {
+					item.classList.remove('filter__item--active')
+				}
+
+				else {
+					item.classList.add('filter__item--active')
+				}
+			})
+		}
+
+		else if (filterType === 'dropdown') {
+			let { instances, classes: { menuClass }} = ui.dropdowns
+			let { id } = closest(filterItem, menuClass)
+			let menu = instances.filter(({ menu }) => id === menu.id).pop()
+			menu.setActiveMenuItem(filterItem)
+		}
+
 		// Merge config/options
 		let filter = `.filter--${hashFilter}`
 		let options = Object.assign(config, { filter })
-		
-		// Scroll to Isotope Block after Layout 
-		isotope.once('layoutComplete', scrollTo(closest(container, block)))
+
+		// Scroll to Isotope Block after Layout
+		if (block !== document.getElementsByClassName('block')[0].id) {
+			isotope.once('layoutComplete', scrollTo(closest(container, block)))
+		}
 
 		// Sort / Layout
 		isotope.arrange(options)
@@ -48,5 +64,4 @@ function hashLoad(config, hash, filters) {
 	}
 }
 
-
-export default hashLoad	
+export default hashLoad
