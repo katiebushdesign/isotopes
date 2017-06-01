@@ -15,7 +15,7 @@ import sizing from './sizing'
 // import hashLoad from './hashLoad'
 import history from './history'
 import loader from './loader'
-import lazyload from 'modules/team'
+import lazyload from 'modules/team/images'
 
 const init = {
 	onHover(filters, config) {
